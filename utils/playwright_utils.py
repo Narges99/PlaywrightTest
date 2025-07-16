@@ -43,3 +43,12 @@ def check_status(url: str):
             }
         finally:
             browser.close()
+
+def click_accept_cookie(page):
+    try:
+        accept_button = page.locator('button:has-text("پذیرش")')
+        if accept_button.is_visible():
+            accept_button.click()
+
+    except Exception as e:
+        message =  f"❌ خطا در کلیک روی دکمه 'پذیرش': {e}"

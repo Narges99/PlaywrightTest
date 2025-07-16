@@ -1,5 +1,5 @@
-from test.dadkav_test import *
+from test.dadkav_playwright_E2E import *
 
 if __name__ == "__main__":
-    test_check_status()
-    test_contradiction_detection()
+    dadkav_test()
+
