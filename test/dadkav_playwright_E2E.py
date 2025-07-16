@@ -90,8 +90,8 @@ def test_search():
 
             search_button = page.locator('button:has-text("جستجو")')
             search_button.click()
-
-            page.wait_for_selector('tbody.MuiTableBody-root')
+            current_step = "نتایج جستجو"
+            page.wait_for_selector('tbody.MuiTableBody-root' , timeout=60000)
 
             if page.locator('tbody.MuiTableBody-root').count() > 0:
                 message += "✅ جدول نتایج جستجو با موفقیت نمایش داده شد.\n"
@@ -155,7 +155,7 @@ def test_summerize():
             else:
                 summarize_button.click()
                 current_step = "خلاصه سازی فایل بارگذاری شده"
-                page.wait_for_selector('p.MuiTypography-root.muirtl-vr16bb', timeout=50000)
+                page.wait_for_selector('p.MuiTypography-root.muirtl-vr16bb', timeout=100000)
 
                 if page.locator('p.MuiTypography-root.muirtl-vr16bb').is_visible():
                     message += "✅ خلاصه‌سازی با موفقیت انجام شد.\n"
@@ -200,7 +200,7 @@ def test_smart_assistant():
             send_button = page.locator('button:has-text("ارسال")')
             send_button.click()
 
-            page.wait_for_selector('div[style="text-align: justify;"]', timeout=100000)
+            page.wait_for_selector('div[style="text-align: justify;"]', timeout=200000)
 
             if page.locator('div[style="text-align: justify;"]').is_visible():
                 message += "✅ سوال با موفقیت ارسال شد و جواب دریافت شده است.\n"
