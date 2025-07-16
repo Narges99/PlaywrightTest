@@ -5,7 +5,17 @@ from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 def check_status(url: str):
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True ,  args=["--no-sandbox", "--disable-setuid-sandbox"])
+        browser = p.chromium.launch(
+            headless=True,
+            args=[
+                "--no-sandbox",
+                "--disable-setuid-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-extensions",
+                "--disable-gpu",
+                "--disable-software-rasterizer"
+            ]
+        )
         page = browser.new_page()
         start = time.time()
 

@@ -19,7 +19,17 @@ def test_contradiction_detection():
     message = ""
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True ,   args=["--no-sandbox", "--disable-setuid-sandbox"])
+        browser = p.chromium.launch(
+            headless=True,
+            args=[
+                "--no-sandbox",
+                "--disable-setuid-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-extensions",
+                "--disable-gpu",
+                "--disable-software-rasterizer"
+            ]
+        )
         page = browser.new_page()
 
         try:
@@ -58,7 +68,17 @@ def test_search():
     current_step = "شروع تست جستجو"
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True , args=["--no-sandbox", "--disable-setuid-sandbox"])
+        browser = p.chromium.launch(
+            headless=True,
+            args=[
+                "--no-sandbox",
+                "--disable-setuid-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-extensions",
+                "--disable-gpu",
+                "--disable-software-rasterizer"
+            ]
+        )
         page = browser.new_page()
 
         try:
@@ -92,7 +112,17 @@ def test_summerize():
     current_step = "شروع تست آپلود فایل و خلاصه‌سازی"
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True , args=["--no-sandbox", "--disable-setuid-sandbox"])
+        browser = p.chromium.launch(
+            headless=True,
+            args=[
+                "--no-sandbox",
+                "--disable-setuid-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-extensions",
+                "--disable-gpu",
+                "--disable-software-rasterizer"
+            ]
+        )
         page = browser.new_page()
 
         try:
@@ -146,7 +176,17 @@ def test_smart_assistant():
     current_step = "شروع تست سوال از سامانه"
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True , args=["--no-sandbox", "--disable-setuid-sandbox"])
+        browser = p.chromium.launch(
+            headless=True,
+            args=[
+                "--no-sandbox",
+                "--disable-setuid-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-extensions",
+                "--disable-gpu",
+                "--disable-software-rasterizer"
+            ]
+        )
         page = browser.new_page()
 
         try:
