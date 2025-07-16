@@ -1,7 +1,7 @@
-DADKAV_URL = "http://virtualjuristic.datakaveh.com:7102/"
-CONTRADICTION_DETECTION_URL = "http://virtualjuristic.datakaveh.com:7102/contradiction_detection"
-SUMMERIZE_URL = "http://virtualjuristic.datakaveh.com:7102/summerize"
-SMART_ASSISTANT_URL = "http://virtualjuristic.datakaveh.com:7102/smart-assistant"
+DADKAV_URL = "http://host.docker.internal:7102/"
+CONTRADICTION_DETECTION_URL = "http://host.docker.internal:7102/contradiction_detection"
+SUMMERIZE_URL = "http://host.docker.internal:7102/summerize"
+SMART_ASSISTANT_URL = "http://host.docker.internal:7102/smart-assistant"
 
 LEGAL_FACT = "هرگونه قراردادی که به امضای طرفین نرسد، از لحاظ قانونی معتبر نبوده و نمی‌تواند باعث ایجاد تعهدات یا حقوق برای هیچ یک از طرفین شود"
 
