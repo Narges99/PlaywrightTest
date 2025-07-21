@@ -1,23 +1,31 @@
+import json
 import os
 from playwright.sync_api import sync_playwright
 from config import *
 from utils.playwright_utils import check_status , click_accept_cookie
 from utils.elasticsearch_utils import log_to_elasticsearch
 from utils.balebot_utils import send_message_to_bale
+from utils.utils import update_test_status, send_sms
+
 
 def test_check_status():
     result = check_status(DADKAV_URL)
     message = ""
+    status_err = False
     if result["success"]:
         message = f"✅ سامانه دادکاو در دسترس است\n⏱ زمان پاسخ: {result['response_time']} ثانیه"
     else:
         message = f"❌ سامانه در دسترس نیست\n⚠️ خطا: {result['error'] or 'کد وضعیت: ' + str(result['status_code'])}"
-    return message
+        status_err = True
+    return {
+            "status_err": status_err,
+            "message": message
+        }
 
 def test_contradiction_detection():
     current_step = "شروع تست"
     message = ""
-
+    status_err = False
     with sync_playwright() as p:
         browser = p.chromium.launch(
             headless=True,
@@ -52,19 +60,24 @@ def test_contradiction_detection():
             current_step = "بررسی وجود پیام خطا"
             if page.locator("text=خطا").first.is_visible():
                 message += f"❌ خطا در {current_step} ظاهر شد\n"
+                status_err = True
             else:
                 message += f"✅ تناقض‌یابی با موفقیت انجام شد\n"
 
         except Exception as e:
             message += f"❌ خطا در مرحله: {current_step}\n🟥 جزئیات: {e}"
+            status_err = True
 
         finally:
             browser.close()
-
-    return message
+    return  {
+            "status_err": status_err,
+            "message": message
+        }
 
 def test_search():
     message = ""
+    status_err = False
     current_step = "شروع تست جستجو"
 
     with sync_playwright() as p:
@@ -97,18 +110,26 @@ def test_search():
                 message += "✅ جدول نتایج جستجو با موفقیت نمایش داده شد.\n"
             else:
                 message += "❌ هیچ جدولی برای نتایج جستجو یافت نشد.\n"
+                status_err = True
 
         except Exception as e:
             message += f"❌ خطا در مرحله: {current_step}\n🟥 جزئیات: {e}"
+            status_err = True
 
         finally:
             browser.close()
 
+        response = {
+            "status_err": status_err,
+            "message": message
+        }
     _report("تست جستجو - تجارت الکترونیک", message, DADKAV_URL, "✅" in message, current_step)
-    return message
+    return response
 
 def test_summerize():
     message = ""
+    status_err = False
+
     current_step = "شروع تست آپلود فایل و خلاصه‌سازی"
 
     with sync_playwright() as p:
@@ -140,18 +161,20 @@ def test_summerize():
             file_input = page.locator('#file-upload')
             file_input.set_input_files(file_path)
 
-            page.wait_for_selector('p.MuiTypography-root:has-text("فایل‌های خود را اینجا بکشید")', timeout=10000)
+            page.wait_for_selector('p.MuiTypography-root:has-text("فایل‌های خود را اینجا بکشید")', timeout=6000)
 
             uploaded_file_name = page.locator('p.MuiTypography-root.muirtl-1k3b2k0').inner_text()
             if uploaded_file_name:
                 message += "✅ فایل بارگذاری شد\n"
             else:
                 message += "❌ فایل بارگذاری شده نمایش داده نشد.\n"
+                status_err = True
 
             summarize_button = page.locator('button:has-text("خلاصه کن")')
 
             if summarize_button.is_disabled():
                 message += "❌ دکمه 'خلاصه کن' غیرفعال است.\n"
+                status_err = True
             else:
                 summarize_button.click()
                 current_step = "خلاصه سازی فایل بارگذاری شده"
@@ -161,18 +184,25 @@ def test_summerize():
                     message += "✅ خلاصه‌سازی با موفقیت انجام شد.\n"
                 else:
                     message += "❌ مشکلی در خلاصه‌سازی به وجود آمد.\n"
+                    status_err = True
 
         except Exception as e:
             message += f"❌ خطا در مرحله: {current_step}\n🟥 جزئیات: {e}"
+            status_err = True
+
 
         finally:
             browser.close()
 
     _report("تست آپلود فایل و خلاصه‌سازی", message, DADKAV_URL, "✅" in message, current_step)
-    return message
+    return  {
+            "status_err": status_err,
+            "message": message
+        }
 
 def test_smart_assistant():
     message = ""
+    status_err = False
     current_step = "شروع تست سوال از سامانه"
 
     with sync_playwright() as p:
@@ -200,20 +230,26 @@ def test_smart_assistant():
             send_button = page.locator('button:has-text("ارسال")')
             send_button.click()
 
-            page.wait_for_selector('div[style="text-align: justify;"]', timeout=200000)
+            page.wait_for_selector('div[style="text-align: justify;"]', timeout=100000)
 
             if page.locator('div[style="text-align: justify;"]').is_visible():
                 message += "✅ سوال با موفقیت ارسال شد و جواب دریافت شده است.\n"
             else:
                 message += "❌ مشکل در ارسال سوال یا دریافت جواب.\n"
+                status_err = True
+
 
         except Exception as e:
             message += f"❌ خطا در مرحله: {current_step}\n🟥 جزئیات: {e}"
+            status_err = True
 
         finally:
             browser.close()
 
-    return message
+    return {
+            "status_err": status_err,
+            "message": message
+        }
 
 def click_next_step(page):
     button = page.locator('button:has-text("مرحله بعد")').filter(has=page.locator(":visible")).last
@@ -228,25 +264,65 @@ def dadkav_test():
     message = "🖥️ سامانه دادکاو:\n\n"
 
     status_message = test_check_status()
-    message += f"🔍 تست وضعیت سامانه:\n{status_message}\n\n"
+    m = status_message["message"]
+    update_test_status("test_check_status" , status_message["status_err"] , DADKAV_STATUS_FILE)
+    message += f"🔍 تست وضعیت سامانه:\n{m}\n\n"
 
     search_message = test_search()
-    message += f"🔎 تست جستجو:\n{search_message}\n\n"
+    m = search_message["message"]
+    update_test_status("test_search" , search_message["status_err"] , DADKAV_STATUS_FILE)
+    message += f"🔎 تست جستجو:\n{m}\n\n"
 
     contradiction_message = test_contradiction_detection()
-    message += f"⚖️ تست تناقض‌یابی:\n{contradiction_message}\n\n"
+    m = contradiction_message["message"]
+    update_test_status("test_contradiction_detection" , contradiction_message["status_err"] , DADKAV_STATUS_FILE)
+    message += f"⚖️ تست تناقض‌یابی:\n{m}\n\n"
 
     summerize_message = test_summerize()
-    message += f"📝 تست خلاصه‌سازی:\n{summerize_message}\n\n"
+    m = summerize_message["message"]
+    update_test_status("test_summerize" , summerize_message["status_err"], DADKAV_STATUS_FILE)
+    message += f"📝 تست خلاصه‌سازی:\n{m}\n\n"
 
     ask_question_message = test_smart_assistant()
-    message += f"❓ تست از من بپرس:\n{ask_question_message}\n\n"
+    m = ask_question_message["message"]
+    update_test_status("test_smart_assistant" , ask_question_message["status_err"], DADKAV_STATUS_FILE)
+    message += f"❓ تست از من بپرس:\n{m}\n\n"
+
+    print(message)
+    M = check_status_messages_and_notify()
+    print(M)
 
 
     send_message_to_bale(message)
 
+def check_status_messages_and_notify():
+    with open(DADKAV_STATUS_FILE, "r") as file:
+        status = json.load(file)
+
+    messages = []
+
+    for test_name, count in status.items():
+        if count > 3:
+            if test_name == "test_check_status":
+                messages.append("❌ سامانه دادکاو بیش از ۳ بار در دسترس نبوده است.")
+            elif test_name == "test_search":
+                messages.append("❌ بخش جستجو بیش از ۳ بار با مشکل مواجه شده است.")
+            elif test_name == "test_contradiction_detection":
+                messages.append("❌ بخش تناقض‌یابی بیش از ۳ بار با مشکل مواجه شده است.")
+            elif test_name == "test_summerize":
+                messages.append("❌ بخش خلاصه‌سازی بیش از ۳ بار با مشکل مواجه شده است.")
+            elif test_name == "test_smart_assistant":
+                messages.append("❌ بخش دستیار هوشمند بیش از ۳ بار با مشکل مواجه شده است.")
+    total_message = "\n".join(messages)
+
+    if total_message:
+        send_sms(total_message, DrRahmaniMobile)
+        send_sms(total_message, AllahGholiMobile)
+        send_sms(total_message, NoursalehiMobile)
+
+    return "\n".join(messages)
+
 def _report(scenario, message, url, success: bool, step: str):
-     print(message)
      print(message)
     # send_message_to_bale(message)
     # log_to_elasticsearch({
