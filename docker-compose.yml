@@ -1,0 +1,6 @@
+version: "3.9"
+
+services:
+  playwright:
+    build: .
+    container_name: playwright_runner
