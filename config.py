@@ -27,3 +27,8 @@ RAHNEMUD_USERNAME2 = "admin"
 RAHNEMUD_PASSWORD2 = "qwert@123"
 
 RAHNEMUD_STATUS_FILE = "test_status_json/rahnemud_test_status.json"
+
+#****************crowdsourcing****************
+CROWDSOURCING_URL = "http://virtualjuristic.datakaveh.com:7097/login"
+CROWDSOURCING_MOBILE = "01234567890"
+CROWDSOURCING_CONFIRM = "1111"
