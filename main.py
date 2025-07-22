@@ -1,5 +1,7 @@
-from test.dadkav_playwright_E2E import *
+from test.dadkav_playwright_E2E import dadkav_test
+from test.rahnemud_playwright_E2E import rahnemud_test
 
 if __name__ == "__main__":
     dadkav_test()
+    # rahnemud_test()
 
