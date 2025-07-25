@@ -45,10 +45,12 @@ def test_login_rahnemud():
             page.wait_for_load_state("networkidle")
 
             current_step = "بررسی موفقیت لاگین"
+            page.wait_for_selector("p:has-text('پروفایل ادمین')", timeout=10000)
+
             if page.locator("p", has_text="پروفایل ادمین").first.is_visible():
                 message += "✅ لاگین با موفقیت انجام شد\n"
             else:
-                message += f"❌ لاگین انجام شد ولی المان مورد انتظار دیده نشد\n"
+                message += "❌ لاگین انجام شد ولی 'پروفایل ادمین' دیده نشد\n"
                 status_err = True
 
         except Exception as e:
@@ -100,10 +102,12 @@ def test_login_rahnemud2():
             page.wait_for_load_state("networkidle")
 
             current_step = "بررسی موفقیت لاگین"
+            page.wait_for_selector("p:has-text('پروفایل ادمین')", timeout=10000)
+
             if page.locator("p", has_text="پروفایل ادمین").first.is_visible():
                 message += "✅ لاگین با موفقیت انجام شد\n"
             else:
-                message += f"❌ لاگین انجام شد ولی المان مورد انتظار دیده نشد\n"
+                message += "❌ لاگین انجام شد ولی 'پروفایل ادمین' دیده نشد\n"
                 status_err = True
 
         except Exception as e:
@@ -146,9 +150,11 @@ def check_status_messages_and_notify():
     messages = []
 
     if status.get("test_login_rahnamud", 0) > 3:
-        messages.append("❌ ورود به سامانه رهنمود بیش از ۳ بار با خطا مواجه شده است.")
+        messages.append("❌ ورود به سامانه  7111 بیش از ۳ بار با خطا مواجه شده است.")
+    if status.get("test_login_rahnamud2", 0) > 3:
+        messages.append("❌ ورود به سامانه  7109 بیش از ۳ بار با خطا مواجه شده است.")
 
-    total_message = "\n".join(messages)
+    total_message = "سامانه رهنمود:\n" + "\n".join(messages)
 
     if total_message:
         send_sms(total_message, DrRahmaniMobile)

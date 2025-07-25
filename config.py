@@ -5,9 +5,9 @@ ELASTIC_INDEX = "playwright_index"
 #Balebot
 BALE_BOT_TOKEN = "816752871:rhYBLdGSLrZ9521TdpRfIbhWcF86PnKMDyA9NnzM"
 BALE_CHAT_ID = "6289115076"
-DrRahmaniMobile = "09122144192"
-AllahGholiMobile ="09117788842"
-NoursalehiMobile = "09129529577"
+DrRahmaniMobile = "989122144192"
+AllahGholiMobile ="989117788842"
+NoursalehiMobile = "989129529577"
 
 #****************dadkav****************
 DADKAV_URL = "http://virtualjuristic.datakaveh.com:7102/"
@@ -32,3 +32,10 @@ RAHNEMUD_STATUS_FILE = "test_status_json/rahnemud_test_status.json"
 CROWDSOURCING_URL = "http://virtualjuristic.datakaveh.com:7097/login"
 CROWDSOURCING_MOBILE = "01234567890"
 CROWDSOURCING_CONFIRM = "1111"
+CROWDSOURCING_STATUS_FILE = "test_status_json/crowdsourcing_test_status.json"
+
+#****************sahad****************
+SAHAD_URL = "http://94.232.173.61:8000/login/"
+SAHAD_MOBILE = "01234567890"
+SAHAD_CONFIRM = "1111"
+SAHAD_STATUS_FILE = "test_status_json/sahad_test_status.json"

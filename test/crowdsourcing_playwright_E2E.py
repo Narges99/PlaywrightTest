@@ -13,7 +13,7 @@ def test_crowdsourcing_login():
 
     with sync_playwright() as p:
         browser = p.firefox.launch(
-            headless=False,
+            headless=True   ,
             args=[
                 "--no-sandbox",
                 "--disable-setuid-sandbox",
@@ -40,9 +40,6 @@ def test_crowdsourcing_login():
 
             current_step = "وارد کردن کد تایید"
             page.fill('input[id=":r1:"]', CROWDSOURCING_CONFIRM)
-
-            current_step = "کلیک روی دکمه تایید کد"
-            page.click('button#confirm-code')
 
             current_step = "صبر برای نمایش 'کارتابل من'"
             page.wait_for_selector("p:has-text('کارتابل من')", timeout=10000)
@@ -73,7 +70,7 @@ def crowdsourcing_test():
 
     status_message = test_crowdsourcing_login()
     m = status_message["message"]
-    update_test_status("test_crowdsourcing_login" , status_message["status_err"] , DADKAV_STATUS_FILE)
+    update_test_status("test_crowdsourcing_login" , status_message["status_err"] , CROWDSOURCING_STATUS_FILE)
     message += f"🔐 تست لاگین به سامانه:\n{m}\n\n"
 
 
@@ -85,7 +82,7 @@ def crowdsourcing_test():
     send_message_to_bale(message)
 
 def check_status_messages_and_notify():
-    with open(DADKAV_STATUS_FILE, "r") as file:
+    with open(CROWDSOURCING_STATUS_FILE, "r") as file:
         status = json.load(file)
 
     messages = []
@@ -93,8 +90,8 @@ def check_status_messages_and_notify():
     for test_name, count in status.items():
         if count > 3:
             if test_name == "test_crowdsourcing_login":
-                messages.append("❌ ورود به سامانه سجعه بیش از ۳ بار با خطا مواجه شده است.")
-    total_message = "\n".join(messages)
+                messages.append("❌ ورود به سامانه بیش از ۳ بار با خطا مواجه شده است.")
+    total_message = "سامانه سجعه:\n" + "\n".join(messages)
 
     if total_message:
         send_sms(total_message, DrRahmaniMobile)

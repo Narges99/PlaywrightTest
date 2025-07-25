@@ -313,7 +313,7 @@ def check_status_messages_and_notify():
                 messages.append("❌ بخش خلاصه‌سازی بیش از ۳ بار با مشکل مواجه شده است.")
             elif test_name == "test_smart_assistant":
                 messages.append("❌ بخش دستیار هوشمند بیش از ۳ بار با مشکل مواجه شده است.")
-    total_message = "\n".join(messages)
+    total_message = "سامانه دادکاو:\n" + "\n".join(messages)
 
     if total_message:
         send_sms(total_message, DrRahmaniMobile)
