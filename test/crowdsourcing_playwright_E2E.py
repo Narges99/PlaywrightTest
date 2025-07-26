@@ -91,9 +91,8 @@ def check_status_messages_and_notify():
         if count > 3:
             if test_name == "test_crowdsourcing_login":
                 messages.append("❌ ورود به سامانه بیش از ۳ بار با خطا مواجه شده است.")
-    total_message = "سامانه سجعه:\n" + "\n".join(messages)
-
-    if total_message:
+    if messages:
+        total_message = "سامانه سجعه:\n" + "\n".join(messages)
         send_sms(total_message, DrRahmaniMobile)
         send_sms(total_message, AllahGholiMobile)
         send_sms(total_message, NoursalehiMobile)

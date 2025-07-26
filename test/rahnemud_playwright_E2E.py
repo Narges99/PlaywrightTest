@@ -154,11 +154,10 @@ def check_status_messages_and_notify():
     if status.get("test_login_rahnamud2", 0) > 3:
         messages.append("❌ ورود به سامانه  7109 بیش از ۳ بار با خطا مواجه شده است.")
 
-    total_message = "سامانه رهنمود:\n" + "\n".join(messages)
-
-    if total_message:
+    if messages:
+        total_message = "سامانه رهنمود:\n" + "\n".join(messages)
         send_sms(total_message, DrRahmaniMobile)
         send_sms(total_message, AllahGholiMobile)
         send_sms(total_message, NoursalehiMobile)
 
-    return total_message
+    return "\n".join(messages)
