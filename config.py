@@ -5,9 +5,9 @@ ELASTIC_INDEX = "playwright_index"
 #Balebot
 BALE_BOT_TOKEN = "816752871:rhYBLdGSLrZ9521TdpRfIbhWcF86PnKMDyA9NnzM"
 BALE_CHAT_ID = "6289115076"
-DrRahmaniMobile = "989122144192"
-AllahGholiMobile ="989117788842"
-NoursalehiMobile = "989129529577"
+DrRahmaniMobile = "09122144192"
+AllahGholiMobile ="09117788842"
+NoursalehiMobile = "09129529577"
 
 #****************dadkav****************
 DADKAV_URL = "http://virtualjuristic.datakaveh.com:7102/"
