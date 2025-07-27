@@ -14,7 +14,7 @@ def test_crowdsourcing_login():
 
     with sync_playwright() as p:
         browser = p.firefox.launch(
-            headless=False   ,
+            headless=True   ,
             args=[
                 "--no-sandbox",
                 "--disable-setuid-sandbox",
