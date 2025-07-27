@@ -3,6 +3,7 @@ import json
 
 from config import *
 from utils.balebot_utils import send_message_to_bale
+from utils.playwright_utils import click_accept_cookie
 from utils.utils import update_test_status, send_sms
 
 
@@ -13,7 +14,7 @@ def test_crowdsourcing_login():
 
     with sync_playwright() as p:
         browser = p.firefox.launch(
-            headless=True   ,
+            headless=False   ,
             args=[
                 "--no-sandbox",
                 "--disable-setuid-sandbox",
@@ -35,14 +36,19 @@ def test_crowdsourcing_login():
             current_step = "کلیک روی دکمه ورود"
             page.click('button#login-btn')
 
+            click_accept_cookie(page)
+
             current_step = "صبر برای ظاهر شدن فیلد کد تایید"
             page.wait_for_selector('input[id=":r1:"]', timeout=15000)
 
             current_step = "وارد کردن کد تایید"
             page.fill('input[id=":r1:"]', CROWDSOURCING_CONFIRM)
 
-            current_step = "صبر برای نمایش 'کارتابل من'"
-            page.wait_for_selector("p:has-text('کارتابل من')", timeout=10000)
+            current_step = "کلیک روی دکمه تایید کد"
+            page.click('button#confirm-code')
+
+            current_step = "ورود و نمایش 'کارتابل من'"
+            page.wait_for_selector("p:has-text('کارتابل من')", timeout=50000)
 
             current_step = "بررسی ظاهر شدن 'کارتابل من'"
             page.wait_for_load_state("networkidle")
