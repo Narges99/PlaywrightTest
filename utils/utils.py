@@ -1,6 +1,7 @@
 import requests
 import os
 import json
+from datetime import datetime
 
 
 def read_test_status(path):
@@ -23,7 +24,6 @@ def update_test_status(test_name, has_error, path):
 
     with open(path, "w") as file:
         json.dump(status, file)
-
 
 def send_sms(content, destination):
     originator = "50004698986599"
@@ -51,3 +51,8 @@ def send_sms2(template, parameters, destination):
             print(f"Failed to send message. Status code: {response.status_code}, Response: {response.text}")
     except requests.exceptions.RequestException as e:
         print(f"An error occurred: {e}")
+
+def is_valid_time():
+    current_hour = datetime.now().hour
+    current_minute = datetime.now().minute
+    return current_hour in [6, 9, 12, 15] and current_minute < 10

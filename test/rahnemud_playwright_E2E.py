@@ -72,7 +72,7 @@ def test_login_rahnemud2():
 
     with sync_playwright() as p:
         browser = p.firefox.launch(
-            headless=True,
+            headless=False,
             args=[
                 "--no-sandbox",
                 "--disable-setuid-sandbox",
@@ -128,12 +128,12 @@ def rahnemud_test():
     status_message = test_login_rahnemud()
     m = status_message["message"]
     update_test_status("test_login_rahnemud" , status_message["status_err"] , RAHNEMUD_STATUS_FILE)
-    message += f"🔐 تست لاگین به سامانه 7111 :\n{m}\n\n"
+    message += f"🔐 تست لاگین به سامانه 7109 :\n{m}\n\n"
 
     status_message = test_login_rahnemud2()
     m = status_message["message"]
     update_test_status("test_login_rahnemud2" , status_message["status_err"] , RAHNEMUD_STATUS_FILE)
-    message += f"🔐 تست لاگین به سامانه 7109 :\n{m}\n\n"
+    message += f"🔐 تست لاگین به سامانه 7111 :\n{m}\n\n"
 
 
     print(message)
@@ -149,10 +149,10 @@ def check_status_messages_and_notify():
 
     messages = []
 
-    if status.get("test_login_rahnamud", 0) > 3:
-        messages.append("❌ ورود به سامانه  7111 بیش از ۳ بار با خطا مواجه شده است.")
-    if status.get("test_login_rahnamud2", 0) > 3:
+    if status.get("test_login_rahnemud", 0) > 3:
         messages.append("❌ ورود به سامانه  7109 بیش از ۳ بار با خطا مواجه شده است.")
+    if status.get("test_login_rahnemud2", 0) > 3:
+        messages.append("❌ ورود به سامانه  7111 بیش از ۳ بار با خطا مواجه شده است.")
 
     if messages:
         total_message = "سامانه رهنمود:\n" + "\n".join(messages)
