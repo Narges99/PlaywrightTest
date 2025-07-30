@@ -285,10 +285,10 @@ def dadkav_test():
     update_test_status("test_summerize" , summerize_message["status_err"], DADKAV_STATUS_FILE)
     message += f"📝 تست خلاصه‌سازی:\n{m}\n\n"
 
-    # ask_question_message = test_smart_assistant()
-    # m = ask_question_message["message"]
-    # update_test_status("test_smart_assistant" , ask_question_message["status_err"], DADKAV_STATUS_FILE)
-    # message += f"❓ تست از من بپرس:\n{m}\n\n"
+    ask_question_message = test_smart_assistant()
+    m = ask_question_message["message"]
+    update_test_status("test_smart_assistant" , ask_question_message["status_err"], DADKAV_STATUS_FILE)
+    message += f"❓ تست از من بپرس:\n{m}\n\n"
 
     print(message)
     M = check_status_messages_and_notify()
