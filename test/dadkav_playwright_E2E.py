@@ -3,7 +3,7 @@ import os
 from playwright.sync_api import sync_playwright
 from config import *
 from utils.playwright_utils import check_status , click_accept_cookie
-from utils.elasticsearch_utils import log_to_elasticsearch
+from utils.elasticsearch_utils import log_to_elasticsearch, _report
 from utils.balebot_utils import send_message_to_bale
 from utils.utils import update_test_status, send_sms, is_valid_time
 
@@ -17,6 +17,8 @@ def test_check_status():
     else:
         message = f"❌ سامانه در دسترس نیست\n⚠️ خطا: {result['error'] or 'کد وضعیت: ' + str(result['status_code'])}"
         status_err = True
+    _report(1, "در دسترس بودن سامانه", message, not status_err, "در دسترس بودن سامانه")
+
     return {
             "status_err": status_err,
             "message": message
@@ -71,6 +73,7 @@ def test_contradiction_detection():
 
         finally:
             browser.close()
+    _report(1, "تناقض‌یابی", message, not status_err, current_step)
     return  {
             "status_err": status_err,
             "message": message
@@ -124,7 +127,7 @@ def test_search():
             "status_err": status_err,
             "message": message
         }
-    _report("تست جستجو - تجارت الکترونیک", message, DADKAV_URL, "✅" in message, current_step)
+    _report(1 ,"تست جستجو ", message, not status_err, current_step)
     return response
 
 def test_summerize():
@@ -193,8 +196,8 @@ def test_summerize():
 
         finally:
             browser.close()
+    _report(1, "تست آپلود فایل و خلاصه‌سازی", message, not status_err, current_step)
 
-    _report("تست آپلود فایل و خلاصه‌سازی", message, DADKAV_URL, "✅" in message, current_step)
     return  {
             "status_err": status_err,
             "message": message
@@ -247,6 +250,7 @@ def test_smart_assistant():
 
         finally:
             browser.close()
+    _report(1 ,"سوال از سامانه ", message, not status_err, current_step)
 
     return {
             "status_err": status_err,
@@ -323,13 +327,3 @@ def check_status_messages_and_notify():
 
     return "\n".join(messages)
 
-def _report(scenario, message, url, success: bool, step: str):
-     print(message)
-    # send_message_to_bale(message)
-    # log_to_elasticsearch({
-    #     "scenario": scenario,
-    #     "url": url,
-    #     "success": success,
-    #     "message": message,
-    #     "failed_step": None if success else step
-    # })

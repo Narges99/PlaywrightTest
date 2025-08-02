@@ -4,6 +4,7 @@ from playwright.sync_api import sync_playwright
 
 from config import *
 from utils.balebot_utils import send_message_to_bale
+from utils.elasticsearch_utils import _report
 from utils.playwright_utils import click_accept_cookie
 from utils.utils import update_test_status, send_sms
 
@@ -59,7 +60,7 @@ def test_login_rahnemud():
 
         finally:
             browser.close()
-
+    _report(2 ,"لاگین به سامانه 7109 ", message, not status_err, current_step)
     return {
         "status_err": status_err,
         "message": message
@@ -69,10 +70,9 @@ def test_login_rahnemud2():
     current_step = "شروع تست"
     message = ""
     status_err = False
-
     with sync_playwright() as p:
         browser = p.firefox.launch(
-            headless=False,
+            headless=True,
             args=[
                 "--no-sandbox",
                 "--disable-setuid-sandbox",
@@ -116,6 +116,7 @@ def test_login_rahnemud2():
 
         finally:
             browser.close()
+    _report(2 ,"لاگین به سامانه 7111 ", message, not status_err, current_step)
 
     return {
         "status_err": status_err,

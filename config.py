@@ -1,7 +1,13 @@
 
-ELASTIC_URL = "http://localhost:9200"
-ELASTIC_INDEX = "playwright_index"
+ELASTIC_URL = "http://127.0.0.1:5602"
+ELASTIC_INDEX = "ihooshyar_playwright_index"
 
+SYSTEMS = {
+    1: "dadkav",
+    2: "rahnemud",
+    3: "crowdsourcing",
+    4: "sahad"
+}
 #Balebot
 BALE_BOT_TOKEN = "816752871:rhYBLdGSLrZ9521TdpRfIbhWcF86PnKMDyA9NnzM"
 BALE_CHAT_ID = "6289115076"

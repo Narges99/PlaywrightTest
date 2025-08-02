@@ -4,6 +4,7 @@ from playwright.sync_api import sync_playwright
 
 from config import *
 from utils.balebot_utils import send_message_to_bale
+from utils.elasticsearch_utils import _report
 from utils.utils import update_test_status, send_sms
 
 
@@ -13,7 +14,7 @@ def test_login_with_captcha_check():
     status_err = False
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        browser = p.firefox.launch(headless=True)
         page = browser.new_page()
 
         try:
@@ -45,7 +46,7 @@ def test_login_with_captcha_check():
 
         finally:
             browser.close()
-
+    _report(4, "تشخیص نادرست بودن کپچا در لاگین ", message, not status_err, current_step)
     return {
         "status_err": status_err,
         "message": message

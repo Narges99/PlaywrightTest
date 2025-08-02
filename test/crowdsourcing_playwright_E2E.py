@@ -3,6 +3,7 @@ import json
 
 from config import *
 from utils.balebot_utils import send_message_to_bale
+from utils.elasticsearch_utils import _report
 from utils.playwright_utils import click_accept_cookie
 from utils.utils import update_test_status, send_sms
 
@@ -65,6 +66,8 @@ def test_crowdsourcing_login():
 
         finally:
             browser.close()
+    _report(3 ,"لاگین به سامانه", message, not status_err, current_step)
+
     return {
         "status_err": status_err,
         "message": message
