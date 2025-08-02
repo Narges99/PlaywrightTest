@@ -3,10 +3,10 @@ ELASTIC_URL = "http://127.0.0.1:5602"
 ELASTIC_INDEX = "ihooshyar_playwright_index"
 
 SYSTEMS = {
-    1: "dadkav",
-    2: "rahnemud",
-    3: "crowdsourcing",
-    4: "sahad"
+    1: "دادکاو",
+    2: "رهنمود",
+    3: "سجعه",
+    4: "سهاد"
 }
 #Balebot
 BALE_BOT_TOKEN = "816752871:rhYBLdGSLrZ9521TdpRfIbhWcF86PnKMDyA9NnzM"
