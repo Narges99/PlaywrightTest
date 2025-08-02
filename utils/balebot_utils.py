@@ -1,10 +1,10 @@
 import requests
 from config import BALE_BOT_TOKEN, BALE_CHAT_ID
 
-def send_message_to_bale(text: str):
+def send_message_to_bale(text: str , chatid:str = None):
     url = f"https://tapi.bale.ai/bot{BALE_BOT_TOKEN}/sendMessage"
     payload = {
-        "chat_id": BALE_CHAT_ID,
+        "chat_id":chatid or BALE_CHAT_ID,
         "text": text
     }
     try:

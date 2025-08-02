@@ -1,13 +1,12 @@
 from elasticsearch import Elasticsearch
 from datetime import datetime, timedelta
 from utils.balebot_utils import send_message_to_bale
-from config import ELASTIC_URL, ELASTIC_INDEX
+from config import ELASTIC_URL, ELASTIC_INDEX, Playwright_MANAGEMENT_BALE_CHAT_ID
 
 es = Elasticsearch([ELASTIC_URL])
 ES_INDEX = ELASTIC_INDEX
 
 def get_data_from_elasticsearch():
-    # زمان ۲۴ ساعت قبل
     twenty_four_hours_ago = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')
 
     query = {
@@ -15,21 +14,21 @@ def get_data_from_elasticsearch():
             "range": {
                 "submitted_at": {
                     "gte": twenty_four_hours_ago,
-                    "format": "yyyy-MM-dd HH:mm:ss"  # چون فیلد date نیست، باید فرمت مشخص کنیم
+                    "format": "yyyy-MM-dd HH:mm:ss"
                 }
             }
         },
         "aggs": {
             "systems": {
                 "terms": {
-                    "field": "system_name.keyword",  # گروه‌بندی بر اساس نام سامانه
+                    "field": "system_name.keyword",
                     "size": 10
                 },
                 "aggs": {
                     "fail_count": {
                         "filter": {
                             "term": {
-                                "status": False  # چون status بولی است
+                                "status": False
                             }
                         }
                     }
@@ -61,7 +60,7 @@ def main():
     aggregations = get_data_from_elasticsearch()
     message = generate_report(aggregations)
     print(message)
-    send_message_to_bale(message)
+    send_message_to_bale(message , Playwright_MANAGEMENT_BALE_CHAT_ID)
 
 if __name__ == "__main__":
     main()

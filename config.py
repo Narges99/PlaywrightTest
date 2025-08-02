@@ -1,3 +1,4 @@
+from playwright.async_api import Playwright
 
 ELASTIC_URL = "http://127.0.0.1:5602"
 ELASTIC_INDEX = "ihooshyar_playwright_index"
@@ -11,6 +12,7 @@ SYSTEMS = {
 #Balebot
 BALE_BOT_TOKEN = "816752871:rhYBLdGSLrZ9521TdpRfIbhWcF86PnKMDyA9NnzM"
 BALE_CHAT_ID = "6289115076"
+Playwright_MANAGEMENT_BALE_CHAT_ID = "4431083681"
 DrRahmaniMobile = "09122144192"
 AllahGholiMobile ="09117788842"
 NoursalehiMobile = "09129529577"
