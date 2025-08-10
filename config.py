@@ -1,7 +1,7 @@
 from playwright.async_api import Playwright
 
 ELASTIC_URL = "http://127.0.0.1:5602"
-ELASTIC_INDEX = "ihooshyar_playwright_index"
+ELASTIC_INDEX = "irhooshyar_playwright_index"
 
 SYSTEMS = {
     1: "دادکاو",
