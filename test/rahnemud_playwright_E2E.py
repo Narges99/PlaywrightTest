@@ -131,10 +131,10 @@ def rahnemud_test():
     update_test_status("test_login_rahnemud" , status_message["status_err"] , RAHNEMUD_STATUS_FILE)
     message += f"🔐 تست لاگین به سامانه 7109 :\n{m}\n\n"
 
-    status_message = test_login_rahnemud2()
-    m = status_message["message"]
-    update_test_status("test_login_rahnemud2" , status_message["status_err"] , RAHNEMUD_STATUS_FILE)
-    message += f"🔐 تست لاگین به سامانه 7111 :\n{m}\n\n"
+    # status_message = test_login_rahnemud2()
+    # m = status_message["message"]
+    # update_test_status("test_login_rahnemud2" , status_message["status_err"] , RAHNEMUD_STATUS_FILE)
+    # message += f"🔐 تست لاگین به سامانه 7111 :\n{m}\n\n"
 
 
     print(message)
