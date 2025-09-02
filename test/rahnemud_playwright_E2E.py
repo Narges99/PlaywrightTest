@@ -33,6 +33,9 @@ def test_login_rahnemud():
             page.goto(RAHNEMUD_URL, timeout=60000)
             click_accept_cookie(page)
 
+            current_step = "کلیک روی دکمه ورود با حساب محلی"
+            page.click('button:has-text("ورود با حساب محلی")')
+
             current_step = "وارد کردن نام کاربری"
             page.fill('input[id=":r0:"]', RAHNEMUD_USERNAME)
 
@@ -88,6 +91,9 @@ def test_login_rahnemud2():
             current_step = "باز کردن صفحه لاگین"
             page.goto(RAHNEMUD_URL2, timeout=60000)
             click_accept_cookie(page)
+
+            current_step = "کلیک روی دکمه ورود با حساب محلی"
+            page.click('button:has-text("ورود با حساب محلی")')
 
             current_step = "وارد کردن نام کاربری"
             page.fill('input[id=":r0:"]', RAHNEMUD_USERNAME2)

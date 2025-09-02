@@ -1,5 +1,6 @@
 import json
 import os
+import time
 from playwright.sync_api import sync_playwright
 from config import *
 from utils.playwright_utils import check_status , click_accept_cookie
@@ -30,7 +31,7 @@ def test_contradiction_detection():
     status_err = False
     with sync_playwright() as p:
         browser = p.firefox.launch(
-            headless=True,
+            headless=False,
             args=[
                 "--no-sandbox",
                 "--disable-setuid-sandbox",
@@ -44,21 +45,23 @@ def test_contradiction_detection():
 
         try:
             current_step = "صفحه اولیه تناقض‌یابی"
+            current_step = "وارد کردن متن"
             page.goto(CONTRADICTION_DETECTION_URL, timeout=50000)
 
-            current_step = "وارد کردن متن"
-            page.fill("textarea", LEGAL_FACT)
-            click_next_step(page)
 
+            page.fill("textarea", LEGAL_FACT)
             current_step = "غنی‌سازی"
             click_next_step(page)
+            time.sleep(3)
 
             current_step = "شباهت‌سنجی"
             click_next_step(page)
+            time.sleep(3)
 
             current_step = "تناقض‌یابی"
-            if is_valid_time():
-                click_next_step(page)
+            click_next_step(page)
+            time.sleep(15)
+            page.wait_for_selector("p.MuiTypography-root.MuiTypography-body1.muirtl-1xuxagu", timeout=10000)
 
             current_step = "بررسی وجود پیام خطا"
             if page.locator("text=خطا").first.is_visible():
@@ -173,21 +176,21 @@ def test_summerize():
             else:
                 message += "❌ فایل بارگذاری شده نمایش داده نشد.\n"
                 status_err = True
-            if is_valid_time():
-                summarize_button = page.locator('button:has-text("خلاصه کن")')
-                if summarize_button.is_disabled():
-                    message += "❌ دکمه 'خلاصه کن' غیرفعال است.\n"
-                    status_err = True
-                else:
-                    summarize_button.click()
-                    current_step = "خلاصه سازی فایل بارگذاری شده"
-                    page.wait_for_selector('p.MuiTypography-root.muirtl-vr16bb', timeout=100000)
+            # if is_valid_time():
+            summarize_button = page.locator('button:has-text("خلاصه کن")')
+            if summarize_button.is_disabled():
+                message += "❌ دکمه 'خلاصه کن' غیرفعال است.\n"
+                status_err = True
+            else:
+                summarize_button.click()
+                current_step = "خلاصه سازی فایل بارگذاری شده"
+                page.wait_for_selector('p.MuiTypography-root.muirtl-vr16bb', timeout=100000)
 
-                    if page.locator('p.MuiTypography-root.muirtl-vr16bb').is_visible():
-                        message += "✅ خلاصه‌سازی با موفقیت انجام شد.\n"
-                    else:
-                        message += "❌ مشکلی در خلاصه‌سازی به وجود آمد.\n"
-                        status_err = True
+                if page.locator('p.MuiTypography-root.muirtl-vr16bb').is_visible():
+                    message += "✅ خلاصه‌سازی با موفقیت انجام شد.\n"
+                else:
+                    message += "❌ مشکلی در خلاصه‌سازی به وجود آمد.\n"
+                    status_err = True
 
         except Exception as e:
             message += f"❌ خطا در مرحله: {current_step}\n🟥 جزئیات: {e}"
@@ -232,16 +235,16 @@ def test_smart_assistant():
 
             send_button = page.locator('button:has-text("ارسال")')
             message += "✅ سوال با موفقیت ارسال شد.\n"
-            if is_valid_time():
-                send_button.click()
+            # if is_valid_time():
+            send_button.click()
 
-                page.wait_for_selector('div[style="text-align: justify;"]', timeout=100000)
+            page.wait_for_selector('div[style="text-align: justify;"]', timeout=100000)
 
-                if page.locator('div[style="text-align: justify;"]').is_visible():
-                    message += "و جواب دریافت شده است.\n"
-                else:
-                    message += "❌ مشکل در ارسال سوال یا دریافت جواب.\n"
-                    status_err = True
+            if page.locator('div[style="text-align: justify;"]').is_visible():
+                message += "و جواب دریافت شده است.\n"
+            else:
+                message += "❌ مشکل در ارسال سوال یا دریافت جواب.\n"
+                status_err = True
 
 
         except Exception as e:
@@ -279,20 +282,21 @@ def dadkav_test():
     update_test_status("test_search" , search_message["status_err"] , DADKAV_STATUS_FILE)
     message += f"🔎 تست جستجو:\n{m}\n\n"
 
-    contradiction_message = test_contradiction_detection()
-    m = contradiction_message["message"]
-    update_test_status("test_contradiction_detection" , contradiction_message["status_err"] , DADKAV_STATUS_FILE)
-    message += f"⚖️ تست تناقض‌یابی:\n{m}\n\n"
+    if is_valid_time():
+        contradiction_message = test_contradiction_detection()
+        m = contradiction_message["message"]
+        update_test_status("test_contradiction_detection" , contradiction_message["status_err"] , DADKAV_STATUS_FILE)
+        message += f"⚖️ تست تناقض‌یابی:\n{m}\n\n"
 
-    summerize_message = test_summerize()
-    m = summerize_message["message"]
-    update_test_status("test_summerize" , summerize_message["status_err"], DADKAV_STATUS_FILE)
-    message += f"📝 تست خلاصه‌سازی:\n{m}\n\n"
+        summerize_message = test_summerize()
+        m = summerize_message["message"]
+        update_test_status("test_summerize" , summerize_message["status_err"], DADKAV_STATUS_FILE)
+        message += f"📝 تست خلاصه‌سازی:\n{m}\n\n"
 
-    ask_question_message = test_smart_assistant()
-    m = ask_question_message["message"]
-    update_test_status("test_smart_assistant" , ask_question_message["status_err"], DADKAV_STATUS_FILE)
-    message += f"❓ تست از من بپرس:\n{m}\n\n"
+        ask_question_message = test_smart_assistant()
+        m = ask_question_message["message"]
+        update_test_status("test_smart_assistant" , ask_question_message["status_err"], DADKAV_STATUS_FILE)
+        message += f"❓ تست از من بپرس:\n{m}\n\n"
 
     print(message)
     M = check_status_messages_and_notify()
