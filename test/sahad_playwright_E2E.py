@@ -77,8 +77,8 @@ def check_status_messages_and_notify():
 
     for test_name, count in status.items():
         if count > 3:
-            if test_name == "test_crowdsourcing_login":
-                messages.append("❌تلاش برای ورود به سامانه  بیش از ۳ بار با خطا مواجه شده است.")
+            if test_name == "test_login_with_captcha_check":
+                messages.append("❌تلاش برای ورود به سامانه بیش از ۳ بار با خطا مواجه شده است.")
     if messages:
         total_message = "سامانه سهاد:\n" + "\n".join(messages)
         send_sms(total_message, DrRahmaniMobile)
