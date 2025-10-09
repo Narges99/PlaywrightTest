@@ -14,7 +14,7 @@ def test_login_with_captcha_check():
     status_err = False
 
     with sync_playwright() as p:
-        browser = p.firefox.launch(headless=True)
+        browser = p.firefox.launch(headless=False)
         page = browser.new_page()
 
         try:
@@ -28,7 +28,7 @@ def test_login_with_captcha_check():
             page.fill('input[id=":r1:"]', SAHAD_CONFIRM)
 
             current_step = "کلیک روی دکمه ورود"
-            page.click('button#login-btn')
+            page.click("#login-btn-assistant")
 
             current_step = "بررسی پیام کپچا اشتباه"
             page.wait_for_load_state("networkidle", timeout=10000)
