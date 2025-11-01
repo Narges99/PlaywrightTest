@@ -14,7 +14,7 @@ def test_login_with_captcha_check():
     status_err = False
 
     with sync_playwright() as p:
-        browser = p.firefox.launch(headless=False)
+        browser = p.firefox.launch(headless=True)
         page = browser.new_page()
 
         try:
